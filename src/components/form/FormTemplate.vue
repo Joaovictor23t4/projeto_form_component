@@ -27,7 +27,7 @@ const inputInfo = [
     placeholder: 'Senha1234@'
   },
   {
-    id: 'password_confirm',
+    id: 'confirm_password',
     text_label: 'Confirmar senha',
     type: 'password',
     placeholder: 'Repita sua senha'
@@ -76,7 +76,7 @@ const inputInfo = [
   },
   {
     id: 'hobbies',
-    text_label: 'Hobbie',
+    text_label: 'Hobbies',
     type: 'text',
     placeholder: 'Escreva um hobbie que você gosta'
   },
@@ -102,7 +102,7 @@ const inputInfo = [
 </script>
 
 <template>
-  <form @submit.prevent="useValidation.validationSubmit()" class="form_cadastro">
+  <form @submit.prevent="useValidation.validateSubmit()" class="form_cadastro">
     <div class="container-inputs" v-for="(input, index) in inputInfo" :key="index">
       <div class="exception" v-if="index === 5">
         <Label :forId="input.id" :text="input.text_label" />

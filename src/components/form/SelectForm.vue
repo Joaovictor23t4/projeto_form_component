@@ -1,9 +1,9 @@
 <script setup>
-import { useUserStore } from '@/stores/user';
+import { useUserStore } from '@/stores/user'
 
-defineProps(['type']);
+defineProps(['type'])
 
-const useUser = useUserStore();
+const useUser = useUserStore()
 
 const states = [
   { uf: 'AC', name: 'Acre' },
@@ -37,20 +37,19 @@ const states = [
 </script>
 
 <template>
-    <select v-if="type === 'state'" :id="type" v-model="useUser.user.state">
-        <option disabled value="Selecione um estado">Selecione um estado</option>
-        <option v-for="(state, index) in states" :key="index" :value="state.uf">
-            {{ state.name }}
-        </option>
-    </select>
-    <select v-else :id="type" v-model="useUser.user.city">
-        <option disabled value="Selecione uma cidade">Selecione uma cidade</option>
-        <option v-for="(city, index) in useUser.listCities" :key="index" :value="city.nome">
-            {{ city.nome }}
-        </option>
-    </select>
+  <select v-if="type === 'state'" :id="type" v-model="useUser.user.state">
+    <option disabled value="Selecione um estado">Selecione um estado</option>
+    <option v-for="(state, index) in states" :key="index" :value="state.uf">
+      {{ state.name }}
+    </option>
+  </select>
+  <select v-else :id="type" v-model="useUser.user.city">
+    <option disabled value="Selecione uma cidade">Selecione uma cidade</option>
+    <option v-for="(city, index) in useUser.listCities" :key="index" :value="city.nome">
+      {{ city.nome }}
+    </option>
+  </select>
 </template>
-
 
 <style scoped>
 #state,

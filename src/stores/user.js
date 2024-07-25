@@ -7,6 +7,7 @@ export const useUserStore = defineStore('user', () => {
     name: '',
     email: '',
     password: '',
+    confirm_password: '',
     date_birth: '',
     state: 'Selecione um estado',
     city: 'Selecione uma cidade',
@@ -16,6 +17,7 @@ export const useUserStore = defineStore('user', () => {
     cep: '',
     hobbies: '',
     github: '',
+    photo: '',
     language: '',
     biography: ''
   })

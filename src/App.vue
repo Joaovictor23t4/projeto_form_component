@@ -1,8 +1,8 @@
 <script setup>
-import { ref, reactive, computed } from 'vue';
-import { useValidationStore } from '@/stores/validation.js';
-import DisplayProfile from './components/DisplayProfile.vue';
-import EditProfile from './components/EditProfile.vue';
+import { ref, reactive, computed } from 'vue'
+import { useValidationStore } from '@/stores/validation'
+import DisplayProfile from './components/DisplayProfile.vue'
+import EditProfile from './components/EditProfile.vue'
 
 const useValidation = useValidationStore();
 const showProfile = ref(useValidation.state.isLogged);
@@ -12,7 +12,9 @@ console.log(showProfile.value)
 <template>
   <div class="main-container">
     <div class="container-description">
-      <h1 class="title">{{ useValidation.state.isLogged === true ? 'Obrigado por logar' : 'Cadastrar-se'}}</h1>
+      <h1 class="title">
+        {{ useValidation.state.isLogged === true ? 'Obrigado por logar' : 'Cadastrar-se' }}
+      </h1>
       <h2 class="subtitle">Serei eternamente grato pelo seu cadastro &#10084;</h2>
     </div>
     <div class="app-container">

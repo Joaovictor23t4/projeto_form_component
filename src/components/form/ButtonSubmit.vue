@@ -1,6 +1,6 @@
 <script setup>
 defineProps({
-    isLogged: Boolean
+  isLogged: Boolean
 })
 </script>
 
