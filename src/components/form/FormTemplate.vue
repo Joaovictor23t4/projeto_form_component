@@ -1,7 +1,12 @@
 <script setup>
-import Label from './LabelForm.vue';
-import Input from './InputForm.vue';
-import SelectForm from './SelectForm.vue';
+import { useValidationStore } from '@/stores/validation'
+import Label from './LabelForm.vue'
+import Input from './InputForm.vue'
+import SelectForm from './SelectForm.vue'
+import ButtonSubmit from './ButtonSubmit.vue'
+
+const useValidation = useValidationStore()
+
 const inputInfo = [
   {
     id: 'name',
@@ -92,32 +97,30 @@ const inputInfo = [
     text_label: 'Biografia',
     type: 'textarea',
     placeholder: 'Escreva uma pequena biografia sua.'
-  },
+  }
 ]
 </script>
 
 <template>
-    <form @submit.prevent="validacaoSubmit()" class="form_cadastro">
-        <div class="container-inputs" v-for="(input, index) in inputInfo" :key="index">
-            <div class="exception" v-if="index === 5">
-              <Label :forId="input.id" :text="input.text_label" />
-              <SelectForm type="state" />
-            </div>
+  <form @submit.prevent="useValidation.validationSubmit()" class="form_cadastro">
+    <div class="container-inputs" v-for="(input, index) in inputInfo" :key="index">
+      <div class="exception" v-if="index === 5">
+        <Label :forId="input.id" :text="input.text_label" />
+        <SelectForm type="state" />
+      </div>
 
-            <div class="exception" v-else-if="index === 6">
-                <Label :forId="input.id" :text="input.text_label" />
-                <SelectForm type="city" />
-            </div>
+      <div class="exception" v-else-if="index === 6">
+        <Label :forId="input.id" :text="input.text_label" />
+        <SelectForm type="city" />
+      </div>
 
-            <div class="normal" v-else>
-                <Label :forId="input.id" :text="input.text_label" />
-                <Input
-                :inputInfo="input"
-                />
-            </div>
-        </div>
-        <input type="submit" class="buttonSignIn" value="Cadastrar-se" />
-    </form>
+      <div class="normal" v-else>
+        <Label :forId="input.id" :text="input.text_label" />
+        <Input :inputInfo="input" />
+      </div>
+    </div>
+    <ButtonSubmit :isLogged="true ? useValidation.state.isLogged : false" />
+  </form>
 </template>
 
 <style scoped>

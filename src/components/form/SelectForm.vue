@@ -1,5 +1,4 @@
 <script setup>
-import { defineProps } from 'vue';
 import { useUserStore } from '@/stores/user';
 
 defineProps(['type']);
