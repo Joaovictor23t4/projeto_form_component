@@ -1,11 +1,11 @@
 <script setup>
-import { useValidationStore } from '@/stores/validation';
-const isLogged = useValidationStore().state.isLogged;
+import { useUserStore } from '@/stores/user';
+
+const useUser = useUserStore();
 </script>
 
 <template>
-  <button v-if="isLogged" type="submit" class="buttonSignIn">Salvar alterações</button>
-  <input v-else type="submit" class="buttonSignIn" value="Cadastrar-se" />
+    <button type="button" class="buttonSignIn" @click="useUser.changeView()">Editar informações</button>
 </template>
 
 <style scoped>

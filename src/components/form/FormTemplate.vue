@@ -119,7 +119,7 @@ const inputInfo = [
         <Input :inputInfo="input" />
       </div>
     </div>
-    <ButtonSubmit :isLogged="true ? useValidation.state.isLogged : false" />
+    <ButtonSubmit />
   </form>
 </template>
 

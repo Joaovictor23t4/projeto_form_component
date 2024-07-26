@@ -1,26 +1,25 @@
 <script setup>
-import { ref, reactive, computed } from 'vue'
-import { useValidationStore } from '@/stores/validation'
-import DisplayProfile from './components/DisplayProfile.vue'
-import EditProfile from './components/EditProfile.vue'
+import { useValidationStore } from './stores/validation';
+import { useUserStore } from './stores/user';
+import DisplayProfile from './components/DisplayProfile.vue';
+import EditProfile from './components/EditProfile.vue';
+import Loading from './components/global/LoadingSpinner.vue';
 
-const useValidation = useValidationStore();
-const showProfile = ref(useValidation.state.isLogged);
-console.log(showProfile.value)
+const { state } = useValidationStore();
+const useUser = useUserStore();
 </script>
 
 <template>
   <div class="main-container">
     <div class="container-description">
       <h1 class="title">
-        {{ useValidation.state.isLogged === true ? 'Obrigado por logar' : 'Cadastrar-se' }}
+        {{ useUser.showProfile === true ? 'Obrigado por logar' : 'Cadastrar-se' }}
       </h1>
       <h2 class="subtitle">Serei eternamente grato pelo seu cadastro &#10084;</h2>
     </div>
-    <div class="app-container">
-      <DisplayProfile v-if="showProfile" />
-      <EditProfile v-else />
-    </div>
+    <Loading v-if="state.isLoading" />
+    <DisplayProfile v-if="useUser.showProfile === true && state.isLoading === false" />
+    <EditProfile v-else-if="useUser.showProfile === false && state.isLoading === false" />
   </div>
 </template>
 

@@ -6,29 +6,41 @@ import { defineStore } from 'pinia';
 export const useValidationStore = defineStore('validation', () => {
   const state = reactive({
     isLogged: false,
-    isLoading: false
+    isLoading: true
   });
 
   const useUser = useUserStore();
-
+  
   const inputValidations = reactive({
-    name: { validated: false, message: '' },
-    email: { validated: false, message: '' },
-    password: { validated: false, message: '' },
-    confirm_password: { validated: false, message: '' },
-    date_birth: { validated: false, message: '' },
-    state: { validated: false, message: '' },
-    city: { validated: false, message: '' },
-    neighbourhood: { validated: false, message: '' },
-    street: { validated: false, message: '' },
-    number: { validated: false, message: '' },
-    cep: { validated: false, message: '' },
-    hobbies: { validated: false, message: '' },
-    github: { validated: false, message: '' },
-    language: { validated: false, message: '' },
-    biography: { validated: false, message: '' }
+    name: { validated: true, message: '' },
+    email: { validated: true, message: '' },
+    password: { validated: true, message: '' },
+    confirm_password: { validated: true, message: '' },
+    date_birth: { validated: true, message: '' },
+    state: { validated: true, message: '' },
+    city: { validated: true, message: '' },
+    neighbourhood: { validated: true, message: '' },
+    street: { validated: true, message: '' },
+    number: { validated: true, message: '' },
+    cep: { validated: true, message: '' },
+    hobbies: { validated: true, message: '' },
+    github: { validated: true, message: '' },
+    language: { validated: true, message: '' },
+    biography: { validated: true, message: '' }
   });
   
+  if (localStorage.getItem('isLogged')) {
+    state.isLogged = Boolean(localStorage.getItem('isLogged'));
+  } else {
+    const properties = Object.keys(inputValidations);
+
+    for (let propety of properties) {
+      inputValidations[propety].validated = false;
+    }
+  };
+  
+  state.isLoading = false;
+
   const validateLettersOnly = (id) => {
     const regex = /^[A-Za-zÀ-ÖØ-öø-ÿ ]+$/;
     inputValidations[id].validated = regex.test(useUser.user[id]);
@@ -81,19 +93,18 @@ export const useValidationStore = defineStore('validation', () => {
   const validateGithub = async () => {
     try {
       const { data } = await axios.get(`https://api.github.com/users/${useUser.user['github']}`);
-      inputValidations['github'].validate = true;
+      inputValidations['github'].validated = true;
       inputValidations['github'].message = '';
 
       useUser.user['photo'] = data['avatar_url'];
     } catch(error) {
-      inputValidations['github'].validate = false;
+      inputValidations['github'].validated = false;
       inputValidations['github'].message = 'Usuário do Github inexistente';
     }
   }
 
   async function validateInput(id) {
-    console.log('Feito', id);
-    if (id === 'name' || id === 'neighbourhood' ||id === 'street' || id === 'hobbies' || id === 'biography') {
+    if (id === 'name' || id === 'neighbourhood' ||id === 'street' || id === 'hobbies' || id === 'biography' || id === 'state' || id === 'city') {
       validateLettersOnly(id);
     }
     else if (id === 'email') {
@@ -111,7 +122,7 @@ export const useValidationStore = defineStore('validation', () => {
     else if (id === 'github') {
       validateGithub(id);
     }
-    else {
+    else if (id === 'date_birth') {
         if (useUser.user['date_birth']) {
           inputValidations['date_birth'].validated = true;
           inputValidations['date_birth'].message = '';
@@ -120,6 +131,16 @@ export const useValidationStore = defineStore('validation', () => {
           inputValidations['date_birth'].validated = false;
           inputValidations['date_birth'].message = 'Por favor, informe sua data de nascimento!';
         };
+      }
+      else {
+        if (useUser.user['language']) {
+          inputValidations['language'].validated = true;
+          inputValidations['language'].message = '';
+        }
+        else {
+          inputValidations['language'].validated = false;
+          inputValidations['language'].message = 'Por favor, informe sua linguagem de programação preferida!';
+        };
       };
     };
     function validateSubmit() {
@@ -127,26 +148,28 @@ export const useValidationStore = defineStore('validation', () => {
       let isAllValidated = true;
 
       for (let property of properties) {
-        if (!inputValidations[property].validate) {
+        if (!inputValidations[property].validated) {
           isAllValidated = false;
           break;
         };
       };
 
       if (isAllValidated) {
-        state.isLogged = true;
+        localStorage.setItem('isLogged', true);
+        localStorage.setItem('user', JSON.stringify(useUser.user));
         spinnerLoading();
       }
-      // console.log(inputValidations['name'].validated, Object.keys(inputValidations))
     };
   
     function spinnerLoading() {
       state.isLoading = true;
       setTimeout(() => {
         state.isLoading = false;
+        state.isLogged = true;
+        useUser.showProfile = true;
       }, 1500);
     }
   
-    return { state, inputValidations, validateInput, validateSubmit }
+    return { state, inputValidations, validateInput, validateSubmit, spinnerLoading }
   }
 );
